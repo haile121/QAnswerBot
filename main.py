@@ -72,7 +72,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reset_user(context)
 
     await update.message.reply_text(
-        "👋 Welcome!\n\nPlease enter your name:"
+        "👋 እንኳን ወደ ፖሊ ግቢ ጉባኤ የኤማሁስ መንገደኞች መንፈሳዊ ጥያቄ፤ መልስ መስጫ bot በሠላም መጡ🕊!\n\nPlease enter your name:"
     )
     return NAME
 
