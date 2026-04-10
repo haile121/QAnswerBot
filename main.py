@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
+import json
 import datetime
 import logging
 import gspread
@@ -39,16 +40,26 @@ SCOPES = [
 ]
 
 try:
-    creds = Credentials.from_service_account_file(
-        "credentials.json",
+    # ✅ NEW: Load credentials from ENV instead of file
+    creds_json = os.getenv("GOOGLE_CREDS")
+
+    if not creds_json:
+        raise ValueError("❌ GOOGLE_CREDS is missing in environment variables!")
+
+    creds_info = json.loads(creds_json)
+
+    creds = Credentials.from_service_account_info(
+        creds_info,
         scopes=SCOPES
     )
+
     client = gspread.authorize(creds)
+
 except Exception as e:
     logger.error(f"Google Auth Error: {e}")
     raise
 
-# ⚠️ PUT YOUR SHEET ID HERE
+# ---------------- SHEET ID ----------------
 SHEET_ID = "1BttBP8LU4N66yq_Jfb1EN0__A5qzMRRRThMCKP2eFFM"
 
 try:
@@ -175,8 +186,6 @@ def main():
     )
 
     app.add_handler(conv)
-
-    # global error handler
     app.add_error_handler(error_handler)
 
     print("🚀 Bot is running...")
